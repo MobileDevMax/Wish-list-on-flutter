@@ -1,0 +1,84 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Wish list',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: WishListScreen(),
+    );
+  }
+}
+
+class Wish {
+  final String title;
+  final String imageUrl;
+
+  Wish(this.title, this.imageUrl);
+}
+
+class WishListScreen extends StatelessWidget {
+  final List<Wish> wishes = [
+    Wish('Name wish', 'URL foto'),
+    Wish('Name wish', 'URL foto'),
+    Wish('Name wish', 'URL foto'),
+    // Add your wishes and photo URL
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Wish list'),
+      ),
+      body: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // 2 elements in a row
+          childAspectRatio: 1, // Aspect Ratios for Squares
+        ),
+        itemCount: wishes.length,
+        itemBuilder: (context, index) {
+          return Card(
+            elevation: 4,
+            margin: EdgeInsets.all(8),
+            child: Column(
+              children: [
+                Expanded(
+                  child: ClipRect(
+                    child: Image.network(
+                      wishes[index].imageUrl,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          color: Colors.grey,
+                          child: Center(child: Text('Loading error')),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    wishes[index].title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
